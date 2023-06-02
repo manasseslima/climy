@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fly"
+name = "climy"
 version = "0.0.0"
 description = "Do cli applications easily."
 authors = ["Manasses Lima <manasseslima@gmail.com>"]
