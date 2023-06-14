@@ -10,4 +10,6 @@ class Option:
         self.name = name
         self.description = description
         self.short = short
-        self.variable = ''
+        self.var_name = ''
+        self.var_type = 'bool'
+        self.value = None
