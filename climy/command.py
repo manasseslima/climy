@@ -12,6 +12,7 @@ class Command:
         self.commands: dict[str, Command] = {}
         self.options: dict[str, Option] = {}
         self.options_short: dict[str, str] = {}
+        self.options_required: set[str] = set()
         self.name = name
         self.title = title
         self.description = description
@@ -44,14 +45,18 @@ class Command:
             *,
             short: str = '',
             var_type: str = 'bool',
-            var_name: str = ''
+            var_name: str = '',
+            required: bool = False
     ):
         option = Option(name=name, description=description, short=short)
         option.var_name = var_name
         option.var_type = var_type
+        option.required = required
         self.options[name] = option
         if short:
             self.options_short[short] = name
+        if required:
+            self.options_required.add(name)
 
     def run(self):
         if (not self.args and not self.handler) or (self.args and self.args[0] in ['-h', '--help', 'help']):
@@ -77,7 +82,12 @@ class Command:
             if not option:
                 self.vars = name
                 continue
+            if name in self.options_required:
+                self.options_required.remove(name)
             option.value = pair.pop(1)
+        if self.options_required:
+            print(f'\033[1;35mSome options are required: [{", ".join(self.options_required)}]')
+            return
         if self.handler:
             self.handler(options=self.options, values=self.vars, comm=self)
 
