@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "climy"
-version = "0.0.1"
+version = "0.1.0"
 description = "Do CLI applications easily."
 authors = ["Manasses Lima <manasseslima@gmail.com>"]
 license = "MIT"
