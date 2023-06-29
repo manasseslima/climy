@@ -21,6 +21,7 @@ class Command:
         self.vars = []
         self.handler = handler
         self.parent = None
+        self.app = None
 
     def __str__(self):
         return f'{self.__class__.__name__}:{self.name}'
@@ -30,13 +31,13 @@ class Command:
 
     def add_command(
             self,
-            command: 'Manager',
+            command: 'Command',
             *,
             name: str = ''
     ):
         command.parent = self
-        name = name or command.name
-        self.commands[name] = command
+        command.app = self.app
+        self.commands[name or command.name] = command
 
     def add_option(
             self,
@@ -69,8 +70,17 @@ class Command:
                 command.args = self.args[1:]
                 command.run()
                 return
-        for arg in self.args:
-            pair = arg.split('=')
+        default_separator = self.app.option_default_separator
+        args = iter(self.args)
+        while True:
+            try:
+                arg = next(args)
+            except Exception as e:
+                break
+            if default_separator == Option.Separators.EQUAL:
+                pair = arg.split('=')
+            else:
+                pair = [arg]
             idx = 0
             if pair[0].startswith('--'):
                 idx = 2
@@ -84,12 +94,18 @@ class Command:
                 continue
             if name in self.options_required:
                 self.options_required.remove(name)
-            option.value = pair.pop(1)
+            if default_separator == Option.Separators.SPACE:
+                option.value = True if option.var_type == 'bool' else next(args)
+            else:
+                if option.var_type == 'bool':
+                    option.value = True
+                else:
+                    option.value = pair.pop(1) if len(pair) > 1 else None
         if self.options_required:
             print(f'\033[1;35mSome options are required: [{", ".join(self.options_required)}]')
             return
         if self.handler:
-            self.handler(options=self.options, values=self.vars, comm=self)
+            self.handler(comm=self)
 
     def generate_help(self, text: str = ''):
         text += "\033[1mUsage:\033[0m\r\n  {name} <command> [options] [arguments]".format(name=self.get_name())
@@ -127,3 +143,8 @@ class Command:
         if self.parent:
             return f'{self.parent.get_name()} {self.name}'
         return self.name
+
+    def set_app(self, app):
+        self.app = app
+        for command in self.commands.values():
+            command.set_app(app)

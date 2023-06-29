@@ -1,5 +1,6 @@
 import sys
 from climy.command import Command
+from climy.option import Option
 
 
 class Application(Command):
@@ -8,12 +9,22 @@ class Application(Command):
             name: str,
             description: str,
             title: str = '',
-            version: str = '0.0.0'
+            version: str = '0.0.0',
+            option_default_separator: Option.Separators = Option.Separators.EQUAL,
     ):
-        self.title = title
+        super().__init__(name=name, description=description, title=title)
         self.version = version
         self.workdir: str = ''
-        super().__init__(name=name, description=description, title=title)
+        self.option_default_separator = option_default_separator
+
+    def add_command(
+            self,
+            command: 'Command',
+            *,
+            name: str = ''
+    ):
+        command.set_app(self)
+        super().add_command(command=command, name=name)
 
     def generate_help(self, text: str = ''):
         text += "\033[1m{title}\033[0m (version {version})".format(title=self.title, version=self.version)
