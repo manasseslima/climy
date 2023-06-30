@@ -36,7 +36,7 @@ class Command:
             name: str = ''
     ):
         command.parent = self
-        command.app = self.app
+        command.app = command.app or self.app
         self.commands[name or command.name] = command
 
     def add_option(
