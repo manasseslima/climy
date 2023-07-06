@@ -1,7 +1,7 @@
-
+from climy.console import ctable, cprogress
 
 def test_print_table():
-    from climy.console import ctable
+
 
     columns = ['ID:10>', 'Name:0', 'Birth:15^', 'Weight:10>', 'Hight:10>', 'Gender:10^']
     data = [
@@ -12,3 +12,7 @@ def test_print_table():
     ]
     ctable(data, columns=columns)
     assert True
+
+
+def test_print_progress():
+    cprogress(size=50, max=300.0, value=20.0, color='green')

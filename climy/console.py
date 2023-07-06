@@ -53,6 +53,8 @@ CCYANBGH = '106'
 CGREYBGH = '107'
 CWHITE = '108'
 
+PGBLOCK = '\u2588'
+
 HSOLID = '\u2500'
 VSOLID = '\u2502'
 
@@ -211,20 +213,17 @@ def ctable(
         sprint(iline, style=style)
 
 
-PGBLOCK = '\u2588'
-
-
 def cprogress(
         size: int,
         max=0.0,
         value=0.0,
-        color='grey'
+        color='grey',
+        before: str = '',
+        after: str = ''
 ):
-    part = max / size
-    maked = styled_text(('\u2501' * 30), style=color + 'bold')
-    rest = styled_text(('\u2500' * 20), style=color + 'dim')
-    print(f'{maked}{rest}')
-
-
-if __name__ == '__main__':
-    cprogress(size=50, max=0.0, value=30.0)
+    fator = size / max
+    maked_size = int(value * fator)
+    rest_size = size - maked_size
+    maked = styled_text(('\u2501' * maked_size), style=f'{color} bold')
+    rest = styled_text(('\u2500' * rest_size), style=f'{color} dim')
+    print(f'{before}{maked}{rest}{after}')
