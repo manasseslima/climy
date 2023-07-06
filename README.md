@@ -84,3 +84,15 @@ And the results:
 │        4 │ Linda Jansen                                     │   09/05/1961  │     1.63 │ 61.0     │
 └──────────┴──────────────────────────────────────────────────┴───────────────┴──────────┴──────────┘
 ```
+
+### Progress Bar
+You can print progresses bars by using cprogress function.
+
+```python
+from climy.console import cprogress
+
+
+cprogress(size=50, max=300.0, value=20.0, color='green')
+
+# ━━━───────────────────────────────────────────────
+```
