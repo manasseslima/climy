@@ -53,3 +53,34 @@ Options:
 Commands:
   env                       Create a perfect environ to application
 ```
+
+## Components
+
+### Tables
+To print tables quickly, you just need to define a column list with the column title, size and align. 
+Then, preparate a data tuple list with the values in the same columns orders. 
+Below, an example how to print tables.
+```python
+from climy.console import ctable
+
+
+columns = ['ID:10>', 'Name:50', 'Birth:15^', 'Weight:10>', 'Hight:10']
+data = [
+    (1, 'Mark White', '26/12/1977', 1.75, 80.0),
+    (2, 'Eva Wood', '30/11/1983', 1.59, 50.0),
+    (3, 'John Apple', '26/06/1917', 1.20, 30.0),
+    (4, 'Linda Jansen', '09/05/1961', 1.63, 61.0)
+]
+ctable(data, columns=columns)
+```
+And the results:
+```
+┌──────────┬──────────────────────────────────────────────────┬───────────────┬──────────┬──────────┐
+│       ID │ Name                                             │     Birth     │   Weight │ Hight    │
+├──────────┼──────────────────────────────────────────────────┼───────────────┼──────────┼──────────┤
+│        1 │ Mark White                                       │   26/12/1977  │     1.75 │ 80.0     │
+│        2 │ Eva Wood                                         │   30/11/1983  │     1.59 │ 50.0     │
+│        3 │ John Apple                                       │   26/06/1917  │      1.2 │ 30.0     │
+│        4 │ Linda Jansen                                     │   09/05/1961  │     1.63 │ 61.0     │
+└──────────┴──────────────────────────────────────────────────┴───────────────┴──────────┴──────────┘
+```
