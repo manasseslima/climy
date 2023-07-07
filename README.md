@@ -86,7 +86,7 @@ And the results:
 ```
 
 ### Progress Bar
-You can print progresses bars by using cprogress function.
+You can print progresses bars by using `cprogress` function.
 
 ```python
 from climy.console import cprogress

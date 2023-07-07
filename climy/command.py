@@ -1,13 +1,21 @@
 from climy.option import Option
 
 
+class Handler:
+    def __init__(self, command: 'Command'):
+        self.command = command
+
+    def run(self):
+        ...
+
+
 class Command:
     def __init__(
             self,
             name: str,
             description: str,
             title: str = '',
-            handler: callable = None
+            handler=None
     ):
         self.commands: dict[str, Command] = {}
         self.options: dict[str, Option] = {}
@@ -105,7 +113,11 @@ class Command:
             print(f'\033[1;35mSome options are required: [{", ".join(self.options_required)}]')
             return
         if self.handler:
-            self.handler(comm=self)
+            if issubclass(self.handler, Handler):
+                handler = self.handler(command=self)
+                handler.run()
+            else:
+                self.handler(comm=self)
 
     def generate_help(self, text: str = ''):
         text += "\033[1mUsage:\033[0m\r\n  {name} <command> [options] [arguments]".format(name=self.get_name())

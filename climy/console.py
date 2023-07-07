@@ -1,5 +1,4 @@
 import shutil
-import time
 
 CINIT = '\033[{}m'
 CEND = '\033[0m'
@@ -114,21 +113,21 @@ cstyles = {
 }
 
 
-def styled_text(text: str, style: str):
+def stext(text: str, style: str):
     splt = style.split(' ')
     ccode = ';'.join([cstyles.get(item, '39') for item in splt])
     return CBLOCK.format(ccode, text)
 
 
 def sprint(text: str, style='', align='<', end='\n'):
-    stext = styled_text(text, style=style)
+    ste = stext(text, style=style)
     if align == '>':
         tml_columns = shutil.get_terminal_size().columns
         size = len(text)
-        stext = ' ' * (tml_columns - size) + stext
+        ste = ' ' * (tml_columns - size) + ste
     elif align == '^':
         tml_columns = shutil.get_terminal_size().columns
-        stext = stext.center(tml_columns)
+        ste = ste.center(tml_columns)
     print(stext, end=end)
 
 
@@ -218,12 +217,20 @@ def cprogress(
         max=0.0,
         value=0.0,
         color='grey',
+        loop=True,
+        hold=False,
         before: str = '',
         after: str = ''
 ):
     fator = size / max
     maked_size = int(value * fator)
     rest_size = size - maked_size
-    maked = styled_text(('\u2501' * maked_size), style=f'{color} bold')
-    rest = styled_text(('\u2500' * rest_size), style=f'{color} dim')
-    print(f'{before}{maked}{rest}{after}')
+    maked = stext(('\u2501' * maked_size), style=f'{color} bold')
+    rest = stext(('\u2500' * rest_size), style=f'{color} dim')
+    if loop:
+        if rest_size > 0:
+            print(f'{before} {maked}{rest} {after}', end='\r' if loop else '\n')
+        elif hold:
+            print(f'{before} {maked}{rest} {after}')
+    else:
+        print(f'{before} {maked}{rest} {after}')
