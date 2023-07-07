@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.2.1]
+### Fixed
+- Fixed error on sprint method. It was print itself.
+
+
 ## [0.2.0] - 2023-07-07
 ### Added
 - New module console with styled print options and some components like ctable and cprogress.

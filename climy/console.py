@@ -128,7 +128,7 @@ def sprint(text: str, style='', align='<', end='\n'):
     elif align == '^':
         tml_columns = shutil.get_terminal_size().columns
         ste = ste.center(tml_columns)
-    print(stext, end=end)
+    print(ste, end=end)
 
 
 def cmove(x, y):
